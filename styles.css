@@ -430,12 +430,30 @@ li {
     margin: 0;
 }
 
+/* Filler pages - lighter styling */
+.filler-front {
+    background: linear-gradient(to right, #faf9f7 0%, #fefefe 15%, #fefefe 100%);
+    box-shadow: inset -2px 0 10px rgba(0,0,0,0.04);
+}
+
 /* Z-index stacking for proper page order */
-.page-1 { z-index: 55; }
-.page-2 { z-index: 54; }
-.page-3 { z-index: 53; }
-.page-4 { z-index: 52; }
-.page-5 { z-index: 51; }
+.page-1 { z-index: 70; }
+.filler-1a { z-index: 69; }
+.filler-1b { z-index: 68; }
+.filler-1c { z-index: 67; }
+.page-2 { z-index: 66; }
+.filler-2a { z-index: 65; }
+.filler-2b { z-index: 64; }
+.filler-2c { z-index: 63; }
+.page-3 { z-index: 62; }
+.filler-3a { z-index: 61; }
+.filler-3b { z-index: 60; }
+.filler-3c { z-index: 59; }
+.page-4 { z-index: 58; }
+.filler-4a { z-index: 57; }
+.filler-4b { z-index: 56; }
+.filler-4c { z-index: 55; }
+.page-5 { z-index: 54; }
 .page-final { z-index: 50; }
 
 /* Cover opens first */
@@ -453,33 +471,72 @@ li {
     }
 }
 
-/* Page turn animation with curl effect */
+/* Cover close animation */
+@keyframes closeCover {
+    0% {
+        transform: rotateY(-160deg);
+    }
+    100% {
+        transform: rotateY(0deg);
+    }
+}
+
+/* Page turn animation - lighter and more flowing */
 @keyframes turnPage {
     0% {
         transform: rotateY(0deg);
-        box-shadow: 0 0 5px rgba(0,0,0,0.1);
     }
-    30% {
-        transform: rotateY(-25deg) rotateZ(-1deg);
-        box-shadow: -8px 8px 15px rgba(0,0,0,0.2);
+    25% {
+        transform: rotateY(-20deg) rotateZ(-0.5deg);
     }
     100% {
         transform: rotateY(-160deg);
-        box-shadow: 0 0 5px rgba(0,0,0,0.1);
     }
 }
 
-/* Page animations - 8s total, staggered */
-.page-1 { animation: turnPage 0.9s ease-in-out 1.8s forwards; }
-.page-2 { animation: turnPage 0.9s ease-in-out 2.9s forwards; }
-.page-3 { animation: turnPage 0.9s ease-in-out 4.0s forwards; }
-.page-4 { animation: turnPage 0.9s ease-in-out 5.1s forwards; }
-.page-5 { animation: turnPage 0.9s ease-in-out 6.2s forwards; }
-
-/* Final page stays visible */
-.page-final {
-    z-index: 49;
+/* Quick filler page flip - fast and light */
+@keyframes flipFiller {
+    0% {
+        transform: rotateY(0deg);
+    }
+    100% {
+        transform: rotateY(-160deg);
+    }
 }
+
+/* Page close animation */
+@keyframes closePage {
+    0% {
+        transform: rotateY(-160deg);
+    }
+    100% {
+        transform: rotateY(0deg);
+    }
+}
+
+/* Step page animations */
+.page-1 { animation: turnPage 0.8s ease-out 1.7s forwards; }
+.page-2 { animation: turnPage 0.8s ease-out 3.3s forwards; }
+.page-3 { animation: turnPage 0.8s ease-out 4.9s forwards; }
+.page-4 { animation: turnPage 0.8s ease-out 6.5s forwards; }
+.page-5 { animation: turnPage 0.8s ease-out 8.1s forwards; }
+
+/* Filler page animations - quick flicks between steps */
+.filler-1a { animation: flipFiller 0.15s ease-in 2.6s forwards; }
+.filler-1b { animation: flipFiller 0.15s ease-in 2.8s forwards; }
+.filler-1c { animation: flipFiller 0.15s ease-in 3.0s forwards; }
+
+.filler-2a { animation: flipFiller 0.15s ease-in 4.2s forwards; }
+.filler-2b { animation: flipFiller 0.15s ease-in 4.4s forwards; }
+.filler-2c { animation: flipFiller 0.15s ease-in 4.6s forwards; }
+
+.filler-3a { animation: flipFiller 0.15s ease-in 5.8s forwards; }
+.filler-3b { animation: flipFiller 0.15s ease-in 6.0s forwards; }
+.filler-3c { animation: flipFiller 0.15s ease-in 6.2s forwards; }
+
+.filler-4a { animation: flipFiller 0.15s ease-in 7.4s forwards; }
+.filler-4b { animation: flipFiller 0.15s ease-in 7.6s forwards; }
+.filler-4c { animation: flipFiller 0.15s ease-in 7.8s forwards; }
 
 /* Reduced motion: show static open book */
 @media (prefers-reduced-motion: reduce) {
@@ -803,38 +860,62 @@ li {
 
 .footer-main {
     display: flex;
-    flex-direction: column;
-    gap: var(--space-lg);
+    justify-content: space-between;
+    align-items: center;
 }
 
 .build-counter {
     font-family: var(--font-sans);
-    font-size: 0.9375rem;
-    color: rgba(250, 250, 250, 0.7);
+    font-size: 0.875rem;
+    color: rgba(250, 250, 250, 0.6);
     margin: 0;
 }
 
-.bluesky-section h3 {
-    font-size: 1rem;
-    margin-bottom: var(--space-sm);
-    color: var(--color-bg);
-}
-
-.bluesky-link {
+/* Bluesky profile link in main content */
+.bluesky-profile-link {
     display: inline-flex;
     align-items: center;
     gap: var(--space-xs);
-    color: var(--color-bg);
     font-family: var(--font-sans);
-    font-size: 0.9375rem;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--color-accent);
+    margin-bottom: var(--space-md);
 }
 
-.bluesky-link:hover {
-    color: rgba(250, 250, 250, 0.8);
+.bluesky-profile-link:hover {
+    color: var(--color-accent-dark);
 }
 
-.bluesky-icon {
+.bluesky-icon-large {
     flex-shrink: 0;
+}
+
+/* Bluesky feed in main content area */
+.bluesky-feed-main {
+    margin-top: var(--space-lg);
+}
+
+.bluesky-feed-main .bluesky-post {
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+}
+
+.bluesky-feed-main .bluesky-post:hover {
+    background: var(--color-bg-white);
+    border-color: var(--color-accent-light);
+}
+
+.bluesky-feed-main .bluesky-post-text {
+    color: var(--color-text);
+}
+
+.bluesky-feed-main .bluesky-post-time {
+    color: var(--color-text-secondary);
+}
+
+.bluesky-feed-main .bluesky-empty {
+    color: var(--color-text-secondary);
 }
 
 /* Bluesky Feed Widget */
@@ -881,16 +962,11 @@ li {
     margin: 0;
 }
 
-.footer-bottom {
-    margin-top: var(--space-xl);
-    padding-top: var(--space-lg);
-    border-top: 1px solid rgba(250, 250, 250, 0.2);
-}
-
 .back-to-top {
     font-family: var(--font-sans);
     font-size: 0.875rem;
-    color: rgba(250, 250, 250, 0.7);
+    color: rgba(250, 250, 250, 0.6);
+    text-decoration: none;
 }
 
 .back-to-top:hover {

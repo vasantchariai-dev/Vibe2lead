@@ -260,10 +260,10 @@
         stepSections.forEach(section => observer.observe(section));
     }
 
-    // ---- Book Animation Restart ----
+    // ---- Book Animation Control ----
 
     /**
-     * Allow restarting the book animation when hero is clicked
+     * Toggle book open/close on click
      */
     function setupBookAnimationRestart() {
         const book = document.querySelector('.book');
@@ -273,20 +273,62 @@
         const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         if (prefersReducedMotion) return;
 
+        let isOpen = false;
+        let isAnimating = false;
+
+        // Mark as open after initial animation completes (~9s)
+        setTimeout(() => {
+            isOpen = true;
+        }, 9000);
+
+        book.style.cursor = 'pointer';
+
         book.addEventListener('click', () => {
+            if (isAnimating) return;
+            isAnimating = true;
+
             const bookCover = book.querySelector('.book-cover');
             const pages = book.querySelectorAll('.page');
 
-            // Remove animations
-            bookCover.style.animation = 'none';
-            pages.forEach(page => page.style.animation = 'none');
+            if (isOpen) {
+                // Close the book - reverse order
+                book.classList.add('closing');
 
-            // Trigger reflow
-            void book.offsetWidth;
+                // Close pages in reverse order (fast)
+                pages.forEach((page, index) => {
+                    const reverseIndex = pages.length - 1 - index;
+                    page.style.animation = `closePage 0.1s ease-in ${reverseIndex * 0.05}s forwards`;
+                });
 
-            // Re-add animations
-            bookCover.style.animation = '';
-            pages.forEach(page => page.style.animation = '');
+                // Close cover last
+                const closeDelay = pages.length * 0.05 + 0.1;
+                bookCover.style.animation = `closeCover 0.4s ease-in ${closeDelay}s forwards`;
+
+                // Wait for close animation to finish
+                setTimeout(() => {
+                    isOpen = false;
+                    isAnimating = false;
+                    book.classList.remove('closing');
+                }, (closeDelay + 0.5) * 1000);
+
+            } else {
+                // Open the book - restart animations
+                bookCover.style.animation = 'none';
+                pages.forEach(page => page.style.animation = 'none');
+
+                // Trigger reflow
+                void book.offsetWidth;
+
+                // Re-add animations
+                bookCover.style.animation = '';
+                pages.forEach(page => page.style.animation = '');
+
+                // Mark as open after animation
+                setTimeout(() => {
+                    isOpen = true;
+                    isAnimating = false;
+                }, 9000);
+            }
         });
     }
 
