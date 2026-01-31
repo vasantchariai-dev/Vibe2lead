@@ -290,6 +290,75 @@
         });
     }
 
+    // ---- Bluesky Feed ----
+
+    /**
+     * Fetch and display recent Bluesky posts
+     */
+    async function loadBlueskyFeed() {
+        const feedContainer = document.getElementById('bluesky-feed');
+        if (!feedContainer) return;
+
+        const handle = 'vibe2lead.bsky.social';
+        const apiUrl = `https://public.api.bsky.app/xrpc/app.bsky.feed.getAuthorFeed?actor=${handle}&limit=3&filter=posts_no_replies`;
+
+        try {
+            const response = await fetch(apiUrl);
+            if (!response.ok) throw new Error('Failed to fetch');
+
+            const data = await response.json();
+            const posts = data.feed || [];
+
+            if (posts.length === 0) {
+                feedContainer.innerHTML = '<p class="bluesky-empty">No posts yet — check back soon.</p>';
+                return;
+            }
+
+            const postsHtml = posts.map(item => {
+                const post = item.post;
+                const text = post.record?.text || '';
+                const createdAt = new Date(post.record?.createdAt);
+                const timeAgo = getTimeAgo(createdAt);
+                const postUrl = `https://bsky.app/profile/${post.author.handle}/post/${post.uri.split('/').pop()}`;
+
+                return `
+                    <a href="${postUrl}" target="_blank" rel="noopener" class="bluesky-post">
+                        <p class="bluesky-post-text">${escapeHtml(text)}</p>
+                        <span class="bluesky-post-time">${timeAgo}</span>
+                    </a>
+                `;
+            }).join('');
+
+            feedContainer.innerHTML = postsHtml;
+        } catch (error) {
+            // Silently fail - just don't show the feed
+            feedContainer.innerHTML = '';
+        }
+    }
+
+    /**
+     * Get human-readable time ago string
+     */
+    function getTimeAgo(date) {
+        const seconds = Math.floor((new Date() - date) / 1000);
+
+        if (seconds < 60) return 'just now';
+        if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
+        if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`;
+        if (seconds < 604800) return `${Math.floor(seconds / 86400)}d ago`;
+
+        return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+    }
+
+    /**
+     * Escape HTML to prevent XSS
+     */
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
     // ---- Initialize ----
 
     function init() {
@@ -308,6 +377,9 @@
 
         // Book animation
         setupBookAnimationRestart();
+
+        // Bluesky feed
+        loadBlueskyFeed();
 
         // Handle browser back/forward for hash changes
         window.addEventListener('hashchange', () => {

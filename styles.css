@@ -825,6 +825,50 @@ li {
     flex-shrink: 0;
 }
 
+/* Bluesky Feed Widget */
+.bluesky-feed {
+    margin-top: var(--space-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.bluesky-post {
+    display: block;
+    padding: var(--space-sm);
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    text-decoration: none;
+    transition: background var(--transition-fast);
+}
+
+.bluesky-post:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.bluesky-post-text {
+    color: var(--color-bg);
+    font-size: 0.875rem;
+    line-height: 1.5;
+    margin: 0 0 var(--space-xs) 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.bluesky-post-time {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    color: rgba(250, 250, 250, 0.5);
+}
+
+.bluesky-empty {
+    font-size: 0.875rem;
+    color: rgba(250, 250, 250, 0.5);
+    margin: 0;
+}
+
 .footer-bottom {
     margin-top: var(--space-xl);
     padding-top: var(--space-lg);
