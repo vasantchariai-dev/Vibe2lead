@@ -249,6 +249,7 @@ li {
 /* ---- Book Animation ---- */
 .book-container {
     perspective: 1500px;
+    perspective-origin: center center;
     display: flex;
     justify-content: center;
     margin-bottom: var(--space-xl);
@@ -257,35 +258,47 @@ li {
 .book {
     position: relative;
     width: 280px;
-    height: 360px;
+    height: 380px;
     transform-style: preserve-3d;
+    transform: rotateY(-20deg) rotateX(5deg);
 }
 
+/* Pages stack for thickness effect */
+.pages-stack {
+    position: absolute;
+    right: 0;
+    top: 3px;
+    bottom: 3px;
+    width: 15px;
+    background: linear-gradient(to right,
+        #e8e6e1 0%,
+        #f5f3f0 20%,
+        #e8e6e1 40%,
+        #f5f3f0 60%,
+        #e8e6e1 80%,
+        #f0eeeb 100%
+    );
+    transform: translateX(7px);
+    border-radius: 0 2px 2px 0;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+}
+
+/* Cover styling */
 .book-cover {
     position: absolute;
     width: 100%;
     height: 100%;
     transform-style: preserve-3d;
-    animation: openBook 15s ease-in-out forwards;
-    animation-delay: 0.5s;
+    transform-origin: left center;
+    animation: openCover 1.2s ease-in-out 0.5s forwards;
+    z-index: 100;
 }
 
-.book-spine {
-    position: absolute;
-    left: 0;
-    width: 30px;
-    height: 100%;
-    background: linear-gradient(to right, #4a5568 0%, #2d3748 100%);
-    transform: rotateY(-90deg) translateX(-15px);
-    transform-origin: right;
-    border-radius: 3px 0 0 3px;
-}
-
-.book-front {
+.cover-front {
     position: absolute;
     width: 100%;
     height: 100%;
-    background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+    background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-dark) 100%);
     border-radius: 0 6px 6px 0;
     display: flex;
     flex-direction: column;
@@ -295,237 +308,217 @@ li {
     text-align: center;
     backface-visibility: hidden;
     box-shadow:
-        2px 2px 8px rgba(0, 0, 0, 0.2),
-        inset -2px 0 4px rgba(0, 0, 0, 0.1);
+        3px 3px 10px rgba(0, 0, 0, 0.3),
+        inset 0 0 30px rgba(0, 0, 0, 0.1),
+        inset -3px 0 10px rgba(0, 0, 0, 0.15);
+}
+
+.cover-front::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 20px;
+    background: linear-gradient(to right, rgba(0,0,0,0.2), transparent);
+    border-radius: 0 0 0 6px;
+}
+
+.cover-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to right, #e0ded9 0%, #f0eeeb 100%);
+    border-radius: 0 6px 6px 0;
+    transform: rotateY(180deg);
+    backface-visibility: hidden;
 }
 
 .book-title {
     font-family: var(--font-serif);
     font-size: 1.375rem;
     font-weight: 600;
-    color: var(--color-paper);
+    color: white;
     margin: 0;
     line-height: 1.3;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.2);
 }
 
 .book-subtitle {
     font-family: var(--font-serif);
     font-size: 1rem;
     font-style: italic;
-    color: rgba(251, 249, 246, 0.8);
+    color: rgba(255, 255, 255, 0.85);
     margin: var(--space-xs) 0 0 0;
 }
 
-.book-pages {
+/* Page base styling */
+.page {
+    position: absolute;
+    width: calc(100% - 5px);
+    height: calc(100% - 6px);
+    top: 3px;
+    left: 0;
+    transform-style: preserve-3d;
+    transform-origin: left center;
+    z-index: 50;
+}
+
+.page-front,
+.page-back {
     position: absolute;
     width: 100%;
     height: 100%;
-    transform-style: preserve-3d;
+    backface-visibility: hidden;
+    border-radius: 0 4px 4px 0;
 }
 
-.page {
-    position: absolute;
-    width: calc(100% - 10px);
-    height: calc(100% - 10px);
-    top: 5px;
-    left: 5px;
-    background: var(--color-paper);
-    border-radius: 0 4px 4px 0;
+.page-front {
+    background: linear-gradient(to right, #f5f5f0 0%, #fafaf8 15%, #fafaf8 100%);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     padding: var(--space-lg);
     text-align: center;
-    backface-visibility: hidden;
-    transform-origin: left;
-    opacity: 0;
-    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.03);
+    box-shadow:
+        inset -3px 0 15px rgba(0,0,0,0.08),
+        inset 0 0 20px rgba(0,0,0,0.02);
 }
 
-.page-number {
+.page-front::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 15px;
+    background: linear-gradient(to right, rgba(0,0,0,0.08), transparent);
+}
+
+.page-back {
+    background: linear-gradient(to left, #f0f0eb 0%, #e8e8e3 100%);
+    transform: rotateY(180deg);
+}
+
+.page-step {
     font-family: var(--font-sans);
-    font-size: 0.75rem;
+    font-size: 2.5rem;
     font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
     color: var(--color-accent);
+    line-height: 1;
     margin-bottom: var(--space-sm);
 }
 
-.page-content {
+.page-text {
     font-family: var(--font-serif);
-    font-size: 1.25rem;
+    font-size: 1.125rem;
     color: var(--color-text);
     margin: 0;
     line-height: 1.4;
 }
 
-/* Book animation keyframes - 15s total for weighty feel */
-@keyframes openBook {
+.page-front-final {
+    background: linear-gradient(to right, #f5f5f0 0%, #fafaf8 15%, #fafaf8 100%);
+}
+
+.page-text-final {
+    font-family: var(--font-serif);
+    font-size: 1.25rem;
+    font-style: italic;
+    color: var(--color-text);
+    margin: 0;
+}
+
+/* Z-index stacking for proper page order */
+.page-1 { z-index: 55; }
+.page-2 { z-index: 54; }
+.page-3 { z-index: 53; }
+.page-4 { z-index: 52; }
+.page-5 { z-index: 51; }
+.page-final { z-index: 50; }
+
+/* Cover opens first */
+@keyframes openCover {
     0% {
         transform: rotateY(0deg);
+        box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
     }
-    10% {
-        transform: rotateY(-160deg);
+    40% {
+        box-shadow: -5px 5px 15px rgba(0, 0, 0, 0.25);
     }
     100% {
         transform: rotateY(-160deg);
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
     }
 }
 
-/* Filler pages - quick flips to simulate thick book */
-.filler-page {
-    position: absolute;
-    width: calc(100% - 10px);
-    height: calc(100% - 10px);
-    top: 5px;
-    left: 5px;
-    background: linear-gradient(to right, var(--color-paper) 0%, #f5f3f0 100%);
-    border-radius: 0 4px 4px 0;
-    backface-visibility: hidden;
-    transform-origin: left;
-    opacity: 0;
-    box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.02);
-}
-
-/* Main content pages */
-.page-1 { animation: flipPage1 15s ease-in-out forwards; animation-delay: 0.5s; }
-.page-2 { animation: flipPage2 15s ease-in-out forwards; animation-delay: 0.5s; }
-.page-3 { animation: flipPage3 15s ease-in-out forwards; animation-delay: 0.5s; }
-.page-4 { animation: flipPage4 15s ease-in-out forwards; animation-delay: 0.5s; }
-.page-5 { animation: flipPage5 15s ease-in-out forwards; animation-delay: 0.5s; }
-
-/* Filler page animations - rapid flips between steps */
-.filler-1a { animation: flipFiller1a 15s ease-in-out forwards; animation-delay: 0.5s; }
-.filler-1b { animation: flipFiller1b 15s ease-in-out forwards; animation-delay: 0.5s; }
-.filler-1c { animation: flipFiller1c 15s ease-in-out forwards; animation-delay: 0.5s; }
-.filler-2a { animation: flipFiller2a 15s ease-in-out forwards; animation-delay: 0.5s; }
-.filler-2b { animation: flipFiller2b 15s ease-in-out forwards; animation-delay: 0.5s; }
-.filler-2c { animation: flipFiller2c 15s ease-in-out forwards; animation-delay: 0.5s; }
-.filler-3a { animation: flipFiller3a 15s ease-in-out forwards; animation-delay: 0.5s; }
-.filler-3b { animation: flipFiller3b 15s ease-in-out forwards; animation-delay: 0.5s; }
-.filler-3c { animation: flipFiller3c 15s ease-in-out forwards; animation-delay: 0.5s; }
-.filler-4a { animation: flipFiller4a 15s ease-in-out forwards; animation-delay: 0.5s; }
-.filler-4b { animation: flipFiller4b 15s ease-in-out forwards; animation-delay: 0.5s; }
-.filler-4c { animation: flipFiller4c 15s ease-in-out forwards; animation-delay: 0.5s; }
-
-/* Step 1: shows at 10%, flips at 20% */
-@keyframes flipPage1 {
-    0%, 9% { opacity: 0; transform: rotateY(0deg); }
-    10%, 19% { opacity: 1; transform: rotateY(0deg); }
-    20%, 100% { opacity: 0; transform: rotateY(-180deg); }
-}
-
-/* Filler pages between step 1 and 2 */
-@keyframes flipFiller1a {
-    0%, 20% { opacity: 0; transform: rotateY(0deg); }
-    21%, 22% { opacity: 1; transform: rotateY(0deg); }
-    23%, 100% { opacity: 0; transform: rotateY(-180deg); }
-}
-@keyframes flipFiller1b {
-    0%, 23% { opacity: 0; transform: rotateY(0deg); }
-    24%, 25% { opacity: 1; transform: rotateY(0deg); }
-    26%, 100% { opacity: 0; transform: rotateY(-180deg); }
-}
-@keyframes flipFiller1c {
-    0%, 26% { opacity: 0; transform: rotateY(0deg); }
-    27%, 28% { opacity: 1; transform: rotateY(0deg); }
-    29%, 100% { opacity: 0; transform: rotateY(-180deg); }
-}
-
-/* Step 2: shows at 30%, flips at 40% */
-@keyframes flipPage2 {
-    0%, 29% { opacity: 0; transform: rotateY(0deg); }
-    30%, 39% { opacity: 1; transform: rotateY(0deg); }
-    40%, 100% { opacity: 0; transform: rotateY(-180deg); }
-}
-
-/* Filler pages between step 2 and 3 */
-@keyframes flipFiller2a {
-    0%, 40% { opacity: 0; transform: rotateY(0deg); }
-    41%, 42% { opacity: 1; transform: rotateY(0deg); }
-    43%, 100% { opacity: 0; transform: rotateY(-180deg); }
-}
-@keyframes flipFiller2b {
-    0%, 43% { opacity: 0; transform: rotateY(0deg); }
-    44%, 45% { opacity: 1; transform: rotateY(0deg); }
-    46%, 100% { opacity: 0; transform: rotateY(-180deg); }
-}
-@keyframes flipFiller2c {
-    0%, 46% { opacity: 0; transform: rotateY(0deg); }
-    47%, 48% { opacity: 1; transform: rotateY(0deg); }
-    49%, 100% { opacity: 0; transform: rotateY(-180deg); }
-}
-
-/* Step 3: shows at 50%, flips at 60% */
-@keyframes flipPage3 {
-    0%, 49% { opacity: 0; transform: rotateY(0deg); }
-    50%, 59% { opacity: 1; transform: rotateY(0deg); }
-    60%, 100% { opacity: 0; transform: rotateY(-180deg); }
-}
-
-/* Filler pages between step 3 and 4 */
-@keyframes flipFiller3a {
-    0%, 60% { opacity: 0; transform: rotateY(0deg); }
-    61%, 62% { opacity: 1; transform: rotateY(0deg); }
-    63%, 100% { opacity: 0; transform: rotateY(-180deg); }
-}
-@keyframes flipFiller3b {
-    0%, 63% { opacity: 0; transform: rotateY(0deg); }
-    64%, 65% { opacity: 1; transform: rotateY(0deg); }
-    66%, 100% { opacity: 0; transform: rotateY(-180deg); }
-}
-@keyframes flipFiller3c {
-    0%, 66% { opacity: 0; transform: rotateY(0deg); }
-    67%, 68% { opacity: 1; transform: rotateY(0deg); }
-    69%, 100% { opacity: 0; transform: rotateY(-180deg); }
-}
-
-/* Step 4: shows at 70%, flips at 80% */
-@keyframes flipPage4 {
-    0%, 69% { opacity: 0; transform: rotateY(0deg); }
-    70%, 79% { opacity: 1; transform: rotateY(0deg); }
-    80%, 100% { opacity: 0; transform: rotateY(-180deg); }
-}
-
-/* Filler pages between step 4 and 5 */
-@keyframes flipFiller4a {
-    0%, 80% { opacity: 0; transform: rotateY(0deg); }
-    81%, 82% { opacity: 1; transform: rotateY(0deg); }
-    83%, 100% { opacity: 0; transform: rotateY(-180deg); }
-}
-@keyframes flipFiller4b {
-    0%, 83% { opacity: 0; transform: rotateY(0deg); }
-    84%, 85% { opacity: 1; transform: rotateY(0deg); }
-    86%, 100% { opacity: 0; transform: rotateY(-180deg); }
-}
-@keyframes flipFiller4c {
-    0%, 86% { opacity: 0; transform: rotateY(0deg); }
-    87%, 88% { opacity: 1; transform: rotateY(0deg); }
-    89%, 100% { opacity: 0; transform: rotateY(-180deg); }
-}
-
-/* Step 5: shows at 90%, stays visible */
-@keyframes flipPage5 {
-    0%, 89% { opacity: 0; transform: rotateY(0deg); }
-    90%, 100% { opacity: 1; transform: rotateY(0deg); }
-}
-
-/* Reduced motion: show static book */
-@media (prefers-reduced-motion: reduce) {
-    .book-cover {
-        animation: none;
+/* Page turn animation with curl effect */
+@keyframes turnPage {
+    0% {
         transform: rotateY(0deg);
+        box-shadow: 0 0 5px rgba(0,0,0,0.1);
     }
+    30% {
+        transform: rotateY(-25deg) rotateZ(-1deg);
+        box-shadow: -8px 8px 15px rgba(0,0,0,0.2);
+    }
+    100% {
+        transform: rotateY(-160deg);
+        box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+}
 
+/* Page animations - 8s total, staggered */
+.page-1 { animation: turnPage 0.9s ease-in-out 1.8s forwards; }
+.page-2 { animation: turnPage 0.9s ease-in-out 2.9s forwards; }
+.page-3 { animation: turnPage 0.9s ease-in-out 4.0s forwards; }
+.page-4 { animation: turnPage 0.9s ease-in-out 5.1s forwards; }
+.page-5 { animation: turnPage 0.9s ease-in-out 6.2s forwards; }
+
+/* Final page stays visible */
+.page-final {
+    z-index: 49;
+}
+
+/* Reduced motion: show static open book */
+@media (prefers-reduced-motion: reduce) {
+    .book-cover,
     .page {
         animation: none;
-        opacity: 0;
     }
 
+    .book-cover {
+        transform: rotateY(-160deg);
+    }
+
+    .page-1,
+    .page-2,
+    .page-3,
+    .page-4,
     .page-5 {
-        opacity: 0;
+        transform: rotateY(-160deg);
+    }
+}
+
+/* Responsive book sizing */
+@media (max-width: 600px) {
+    .book {
+        width: 220px;
+        height: 300px;
+        transform: rotateY(-15deg) rotateX(3deg);
+    }
+
+    .book-title {
+        font-size: 1.125rem;
+    }
+
+    .page-step {
+        font-size: 2rem;
+    }
+
+    .page-text {
+        font-size: 1rem;
     }
 }
 
@@ -544,6 +537,25 @@ li {
     font-weight: 600;
     font-size: 1.25rem;
     margin-top: var(--space-lg);
+}
+
+.hero-subtitle {
+    font-size: 1.125rem;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-lg);
+    text-align: center;
+}
+
+.vibe-coding-intro {
+    margin-top: var(--space-lg);
+    padding: var(--space-md);
+    background: var(--color-bg-white);
+    border-radius: 6px;
+    font-size: 0.9375rem;
+}
+
+.vibe-coding-intro p {
+    margin: 0;
 }
 
 /* ---- CTA Button ---- */
