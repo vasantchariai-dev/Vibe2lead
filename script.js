@@ -276,10 +276,10 @@
         let isOpen = false;
         let isAnimating = false;
 
-        // Mark as open after initial animation completes (~9s)
+        // Mark as open after initial animation completes (~10s)
         setTimeout(() => {
             isOpen = true;
-        }, 9000);
+        }, 10000);
 
         book.style.cursor = 'pointer';
 
@@ -288,33 +288,60 @@
             isAnimating = true;
 
             const bookCover = book.querySelector('.book-cover');
-            const pages = book.querySelectorAll('.page');
+            const pages = Array.from(book.querySelectorAll('.page'));
 
             if (isOpen) {
-                // Close the book - reverse order
+                // Close the book quickly - all pages snap back together
                 book.classList.add('closing');
 
-                // Close pages in reverse order (fast)
-                pages.forEach((page, index) => {
-                    const reverseIndex = pages.length - 1 - index;
-                    page.style.animation = `closePage 0.1s ease-in ${reverseIndex * 0.05}s forwards`;
+                // Reset all page transforms immediately then animate closed
+                pages.forEach(page => {
+                    page.style.transition = 'none';
+                    page.style.animation = 'none';
+                });
+                bookCover.style.transition = 'none';
+                bookCover.style.animation = 'none';
+
+                // Force reflow
+                void book.offsetWidth;
+
+                // Now animate everything closed quickly
+                pages.reverse().forEach((page, index) => {
+                    page.style.transition = `transform 0.08s ease-in ${index * 0.02}s`;
+                    page.style.transform = 'rotateY(0deg)';
                 });
 
-                // Close cover last
-                const closeDelay = pages.length * 0.05 + 0.1;
-                bookCover.style.animation = `closeCover 0.4s ease-in ${closeDelay}s forwards`;
+                // Close cover after pages (quick snap)
+                const coverDelay = pages.length * 0.02 + 0.05;
+                setTimeout(() => {
+                    bookCover.style.transition = 'transform 0.25s ease-out';
+                    bookCover.style.transform = 'rotateY(0deg)';
+                }, coverDelay * 1000);
 
-                // Wait for close animation to finish
+                // Animation complete
                 setTimeout(() => {
                     isOpen = false;
                     isAnimating = false;
                     book.classList.remove('closing');
-                }, (closeDelay + 0.5) * 1000);
+                    // Clear inline styles
+                    pages.forEach(page => {
+                        page.style.transition = '';
+                        page.style.transform = '';
+                    });
+                    bookCover.style.transition = '';
+                    bookCover.style.transform = '';
+                }, (coverDelay + 0.3) * 1000);
 
             } else {
                 // Open the book - restart animations
                 bookCover.style.animation = 'none';
-                pages.forEach(page => page.style.animation = 'none');
+                bookCover.style.transition = '';
+                bookCover.style.transform = '';
+                pages.forEach(page => {
+                    page.style.animation = 'none';
+                    page.style.transition = '';
+                    page.style.transform = '';
+                });
 
                 // Trigger reflow
                 void book.offsetWidth;
@@ -327,7 +354,7 @@
                 setTimeout(() => {
                     isOpen = true;
                     isAnimating = false;
-                }, 9000);
+                }, 10000);
             }
         });
     }

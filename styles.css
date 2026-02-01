@@ -494,13 +494,16 @@ li {
     }
 }
 
-/* Quick filler page flip - fast and light */
+/* Quick filler page flip - corner peel effect */
 @keyframes flipFiller {
     0% {
-        transform: rotateY(0deg);
+        transform: rotateY(0deg) rotateX(0deg);
+    }
+    30% {
+        transform: rotateY(-40deg) rotateX(-8deg);
     }
     100% {
-        transform: rotateY(-160deg);
+        transform: rotateY(-160deg) rotateX(0deg);
     }
 }
 
@@ -514,29 +517,29 @@ li {
     }
 }
 
-/* Step page animations */
+/* Step page animations - hold longer */
 .page-1 { animation: turnPage 0.8s ease-out 1.7s forwards; }
-.page-2 { animation: turnPage 0.8s ease-out 3.3s forwards; }
-.page-3 { animation: turnPage 0.8s ease-out 4.9s forwards; }
-.page-4 { animation: turnPage 0.8s ease-out 6.5s forwards; }
-.page-5 { animation: turnPage 0.8s ease-out 8.1s forwards; }
+.page-2 { animation: turnPage 0.8s ease-out 3.5s forwards; }
+.page-3 { animation: turnPage 0.8s ease-out 5.3s forwards; }
+.page-4 { animation: turnPage 0.8s ease-out 7.1s forwards; }
+.page-5 { animation: turnPage 0.8s ease-out 8.9s forwards; }
 
-/* Filler page animations - quick flicks between steps */
-.filler-1a { animation: flipFiller 0.15s ease-in 2.6s forwards; }
-.filler-1b { animation: flipFiller 0.15s ease-in 2.8s forwards; }
-.filler-1c { animation: flipFiller 0.15s ease-in 3.0s forwards; }
+/* Filler page animations - rapid corner flicks */
+.filler-1a { animation: flipFiller 0.12s ease-in 2.6s forwards; }
+.filler-1b { animation: flipFiller 0.12s ease-in 2.75s forwards; }
+.filler-1c { animation: flipFiller 0.12s ease-in 2.9s forwards; }
 
-.filler-2a { animation: flipFiller 0.15s ease-in 4.2s forwards; }
-.filler-2b { animation: flipFiller 0.15s ease-in 4.4s forwards; }
-.filler-2c { animation: flipFiller 0.15s ease-in 4.6s forwards; }
+.filler-2a { animation: flipFiller 0.12s ease-in 4.4s forwards; }
+.filler-2b { animation: flipFiller 0.12s ease-in 4.55s forwards; }
+.filler-2c { animation: flipFiller 0.12s ease-in 4.7s forwards; }
 
-.filler-3a { animation: flipFiller 0.15s ease-in 5.8s forwards; }
-.filler-3b { animation: flipFiller 0.15s ease-in 6.0s forwards; }
-.filler-3c { animation: flipFiller 0.15s ease-in 6.2s forwards; }
+.filler-3a { animation: flipFiller 0.12s ease-in 6.2s forwards; }
+.filler-3b { animation: flipFiller 0.12s ease-in 6.35s forwards; }
+.filler-3c { animation: flipFiller 0.12s ease-in 6.5s forwards; }
 
-.filler-4a { animation: flipFiller 0.15s ease-in 7.4s forwards; }
-.filler-4b { animation: flipFiller 0.15s ease-in 7.6s forwards; }
-.filler-4c { animation: flipFiller 0.15s ease-in 7.8s forwards; }
+.filler-4a { animation: flipFiller 0.12s ease-in 8.0s forwards; }
+.filler-4b { animation: flipFiller 0.12s ease-in 8.15s forwards; }
+.filler-4c { animation: flipFiller 0.12s ease-in 8.3s forwards; }
 
 /* Reduced motion: show static open book */
 @media (prefers-reduced-motion: reduce) {
