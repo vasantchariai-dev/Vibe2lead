@@ -264,6 +264,7 @@
 
     /**
      * Toggle book open/close on click
+     * Book starts closed and only animates when user clicks
      */
     function setupBookAnimationRestart() {
         const book = document.querySelector('.book');
@@ -276,11 +277,7 @@
         let isOpen = false;
         let isAnimating = false;
 
-        // Mark as open after initial animation completes (~10s)
-        setTimeout(() => {
-            isOpen = true;
-        }, 10000);
-
+        // Book starts closed - no automatic animation
         book.style.cursor = 'pointer';
 
         book.addEventListener('click', () => {
@@ -292,6 +289,7 @@
 
             if (isOpen) {
                 // Close the book quickly - all pages snap back together
+                book.classList.remove('animating');
                 book.classList.add('closing');
 
                 // Reset all page transforms immediately then animate closed
@@ -327,18 +325,21 @@
                     pages.forEach(page => {
                         page.style.transition = '';
                         page.style.transform = '';
+                        page.style.animation = '';
                     });
                     bookCover.style.transition = '';
                     bookCover.style.transform = '';
+                    bookCover.style.animation = '';
                 }, (coverDelay + 0.3) * 1000);
 
             } else {
-                // Open the book - restart animations
-                bookCover.style.animation = 'none';
+                // Open the book - add animating class to trigger CSS animations
+                // First clear any inline styles
+                bookCover.style.animation = '';
                 bookCover.style.transition = '';
                 bookCover.style.transform = '';
                 pages.forEach(page => {
-                    page.style.animation = 'none';
+                    page.style.animation = '';
                     page.style.transition = '';
                     page.style.transform = '';
                 });
@@ -346,11 +347,10 @@
                 // Trigger reflow
                 void book.offsetWidth;
 
-                // Re-add animations
-                bookCover.style.animation = '';
-                pages.forEach(page => page.style.animation = '');
+                // Add animating class to trigger CSS animations
+                book.classList.add('animating');
 
-                // Mark as open after animation
+                // Mark as open after animation completes (~10s)
                 setTimeout(() => {
                     isOpen = true;
                     isAnimating = false;
