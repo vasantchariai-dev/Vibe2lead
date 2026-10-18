@@ -916,6 +916,180 @@ li {
     font-size: 0.875rem;
 }
 
+/* ---- Teaser Box ---- */
+.teaser-box {
+    margin-top: var(--space-lg);
+    padding: var(--space-md);
+    background: var(--color-bg-white);
+    border: 1px solid var(--color-border);
+    border-left: 4px solid var(--color-accent);
+    border-radius: 0 4px 4px 0;
+}
+
+.teaser-box p {
+    margin: 0;
+}
+
+/* ---- Passenger and Pilot Table ---- */
+/* Mobile first: each row stacks as a labelled pair */
+.prompt-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: var(--space-md) 0 var(--space-lg);
+    font-size: 1rem;
+}
+
+.prompt-table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}
+
+.prompt-table tbody,
+.prompt-table tr,
+.prompt-table td {
+    display: block;
+}
+
+.prompt-table tr {
+    padding: var(--space-sm) 0;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.prompt-table tr:first-child {
+    border-top: 2px solid var(--color-text);
+}
+
+.prompt-table td {
+    padding: 0.25rem 0;
+}
+
+.prompt-table td::before {
+    content: attr(data-label);
+    display: block;
+    font-family: var(--font-sans);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-secondary);
+}
+
+.prompt-table td + td::before {
+    color: var(--color-accent);
+}
+
+/* ---- lead2vibe page ---- */
+.hero-single {
+    min-height: auto;
+}
+
+.hero-content.hero-content-single {
+    display: block;
+    max-width: var(--max-width);
+}
+
+.eyebrow {
+    font-family: var(--font-sans);
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--color-accent);
+    margin-bottom: var(--space-xs);
+}
+
+.hero-subline {
+    font-size: 1.25rem;
+    font-style: italic;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-lg);
+}
+
+.section-content-wide {
+    max-width: 1040px;
+}
+
+.card-grid {
+    display: grid;
+    gap: var(--space-md);
+    margin: var(--space-lg) 0;
+}
+
+.risk-card {
+    padding: var(--space-md);
+    background: var(--color-bg-white);
+    border: 1px solid var(--color-border);
+    border-top: 4px solid var(--color-accent);
+    border-radius: 0 0 4px 4px;
+}
+
+.risk-card h3 {
+    margin-bottom: var(--space-xs);
+}
+
+.risk-card p {
+    font-size: 1rem;
+}
+
+.risk-tags {
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-md);
+}
+
+.risk-tag {
+    display: inline-block;
+    padding: 0.125rem 0.625rem;
+    background: var(--color-accent-light);
+    color: var(--color-accent-dark);
+    border-radius: 999px;
+    text-decoration: none;
+}
+
+.risk-tag:hover {
+    text-decoration: underline;
+}
+
+.phrase-list {
+    list-style: none;
+    padding: 0;
+    counter-reset: phrase;
+}
+
+.phrase-card {
+    counter-increment: phrase;
+    display: flex;
+    gap: var(--space-sm);
+    align-items: baseline;
+    margin: 0;
+    padding: var(--space-sm) var(--space-md);
+    background: var(--color-bg-white);
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    font-family: var(--font-sans);
+    font-weight: 600;
+}
+
+.phrase-card::before {
+    content: counter(phrase);
+    flex-shrink: 0;
+    min-width: 1.5rem;
+    color: var(--color-accent);
+}
+
+.source-list li {
+    overflow-wrap: anywhere;
+}
+
+.source-note {
+    font-size: 0.9375rem;
+    color: var(--color-text-secondary);
+}
+
 /* ---- Footer ---- */
 .site-footer {
     background: var(--color-text);
@@ -1088,6 +1262,61 @@ li {
         justify-content: space-between;
         align-items: flex-start;
     }
+
+    /* Passenger and pilot table becomes a two-column table */
+    .prompt-table {
+        display: table;
+    }
+
+    .prompt-table thead {
+        position: static;
+        width: auto;
+        height: auto;
+        overflow: visible;
+        clip: auto;
+        white-space: normal;
+        display: table-header-group;
+    }
+
+    .prompt-table tbody {
+        display: table-row-group;
+    }
+
+    .prompt-table tr {
+        display: table-row;
+        padding: 0;
+    }
+
+    .prompt-table tr:first-child {
+        border-top: none;
+    }
+
+    .prompt-table th,
+    .prompt-table td {
+        display: table-cell;
+        width: 50%;
+        padding: var(--space-sm) var(--space-sm) var(--space-sm) 0;
+        vertical-align: top;
+        text-align: left;
+    }
+
+    .prompt-table th {
+        font-family: var(--font-sans);
+        font-size: 0.9375rem;
+        border-bottom: 2px solid var(--color-text);
+    }
+
+    .prompt-table th + th {
+        color: var(--color-accent);
+    }
+
+    .prompt-table td::before {
+        content: none;
+    }
+
+    .phrase-list {
+        grid-template-columns: 1fr 1fr;
+    }
 }
 
 /* Desktop */
@@ -1105,6 +1334,10 @@ li {
 
     .hero-blurb {
         max-width: none;
+    }
+
+    .card-grid-risks {
+        grid-template-columns: repeat(3, 1fr);
     }
 }
 
