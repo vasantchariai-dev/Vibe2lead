@@ -204,6 +204,8 @@
         if (!link) return;
 
         const targetId = link.getAttribute('href');
+        // Bare "#" links (glossary back links) handle themselves
+        if (targetId === '#') return;
         const target = document.querySelector(targetId);
 
         if (target) {

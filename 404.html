@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page not found — vibe2lead</title>
+    <meta name="robots" content="noindex">
+
+    <!-- GitHub Pages has no server-side redirects and paths are case-sensitive,
+         so send any casing of /leading-ai (e.g. /leading-AI) to the real page -->
+    <script>
+        (function () {
+            var pattern = /\/leading-ai\/?(index\.html)?$/i;
+            var target = location.pathname.replace(pattern, '/leading-ai/');
+            // Only redirect when the path actually changes, so a genuine 404 can't loop
+            if (pattern.test(location.pathname) && target !== location.pathname) {
+                location.replace(target + location.search + location.hash);
+            }
+        })();
+    </script>
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <main id="main-content">
+        <section class="content-section">
+            <div class="section-content">
+                <h1>Page not found</h1>
+                <p>If you typed the web address, check it is correct.</p>
+                <p><a href="/">Go to the vibe2lead homepage</a></p>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
